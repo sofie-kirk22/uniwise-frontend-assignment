@@ -1,5 +1,4 @@
 import { FunctionComponent } from "react";
-
 // Components
 import Item from "./Item";
 
@@ -13,10 +12,21 @@ import Item from "./Item";
  * and remove the ListProps interface
  */
 
-interface ListProps {}
+interface ListProps {
+  items: string[];
+}
 
-const List: FunctionComponent<ListProps> = (props) => {
-  return <div>#List goes here#</div>;
+const List: FunctionComponent<ListProps> = ({ items }) => {
+  if (items.length === 0) return <p>No results found.</p>;
+
+  return (
+    <ul>
+      {items.map((name, index) => (
+        <Item key={index} text={name} />
+      ))}
+    </ul>
+  );
 };
 
 export default List;
+
