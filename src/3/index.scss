@@ -1,4 +1,482 @@
-/* DO NOT CHANGE THIS ROOT CLASS NAME*/
+/* DO NOT CHANGE THIS ROOT CLASS NAME */
 #task-3 {
-  /* Styles goes here */
+  /* Default theme variables */
+  --bg: #0f1115;
+  --panel: #161b22;
+  --muted: #aab3c2;
+  --ink: #ecf1f7;
+  --accent: #78b23c;
+  --accent-2: #67a02f;
+  --danger: #ff6b6b;
+
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 12px;
+  padding: 20px;
+  color: var(--ink);
+  background:
+    radial-gradient(900px 900px at 15% 10%, var(--bg-glow-1), transparent 60%),
+    radial-gradient(900px 900px at 85% 90%, var(--bg-glow-2), transparent 60%),
+    linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  transition: color .2s ease, background-color .2s ease, border-color .2s ease;
+
+  /* Themes override variables on the same element */
+  /* 1) Corporate — blues/greys, crisp + professional */
+  &.theme-1 {
+    --bg-top: #0b121a;
+    --bg-bottom: #0e141b;
+    --bg-glow-1: rgba(80, 140, 220, 0.14);
+    --bg-glow-2: rgba(64, 200, 180, 0.10);
+
+    --panel: #121923;
+    --ink: #e8eef6;
+    --muted: #9fb0c4;
+
+    --accent: #2f7de1;     /* primary blue */
+    --accent-2: #1f5fb1;   /* darker blue */
+    --btnText: #ffffff;
+  }
+
+  /* 2) Barbie — vibrant pinks, playful */
+  /* === Barbie Theme (with background image) === */
+  &.theme-2 {
+    /* Core color palette */
+    --panel: rgba(255, 240, 245, 0.88); /* light blush overlay */
+    --ink: #4a0d2c;
+    --muted: #a0467f;
+    --accent: #ff4fb3;
+    --accent-2: #ff86d7;
+
+    /* Background with the Barbie texture */
+    background:
+      linear-gradient(
+        rgba(255, 255, 255, 0.15),
+        rgba(255, 192, 203, 0.25)
+      ),
+      url("./images/barbie_theme.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+
+    color: var(--ink);
+
+    /* Panels */
+    .panel {
+      background: var(--panel);
+      border: 2px solid color-mix(in srgb, var(--accent) 40%, white);
+      box-shadow: 0 6px 20px rgba(255, 79, 179, 0.25);
+    }
+
+    /* Cards */
+    .card {
+      background: color-mix(in srgb, var(--panel) 90%, white);
+      border: 1px solid color-mix(in srgb, var(--accent) 25%, white);
+    }
+
+    /* Buttons */
+    .btn {
+      border-radius: 12px;
+      border: 1px solid color-mix(in srgb, var(--accent) 25%, white);
+      color: var(--ink);
+    }
+    .btn.primary {
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      border: none;
+      color: white;
+      box-shadow: 0 8px 20px rgba(255, 79, 179, 0.35);
+      &:hover {
+        transform: translateY(-1px);
+      }
+    }
+
+    /* Inputs */
+    .input {
+      border-color: rgba(255, 182, 193, 0.6);
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--ink);
+      &:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.25);
+      }
+    }
+
+    /* Checkboxes */
+    .check .box {
+      border-radius: 8px;
+      border-color: rgba(255, 105, 180, 0.4);
+      background: rgba(255, 255, 255, 0.7);
+    }
+    .item input:checked + .box {
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      border-color: var(--accent);
+    }
+
+    /* Headers */
+    .brand h1 {
+      color: var(--accent);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 1.8rem;
+      text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5);
+    }
+
+    .message {
+      background: rgba(255, 255, 255, 0.75);
+      color: var(--ink);
+      border-left: 3px solid var(--accent);
+      border-radius: 10px;
+    }
+
+    .status .chip {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid color-mix(in srgb, var(--accent) 40%, white);
+      color: var(--ink);
+    }
+  }
+
+  /* 3) Metal / Rock — charcoal + blood red */
+  &.theme-3 {
+    background:
+      linear-gradient(
+        rgba(255, 255, 255, 0.15),
+        rgba(255, 192, 203, 0.25)
+      ),
+      url("./images/metal_theme.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+
+    color: var(--ink);
+
+    --panel: #111215;
+    --ink: #ececee;
+    --muted: #9a9a9c;
+
+    --accent: #750e1c;     /* crimson */
+    --accent-2: #611616;   /* deep maroon */
+    --btnText: #ffffff;
+  }
+
+  /* 4) Lofi theme */
+  &.theme-4 {
+    background:
+      linear-gradient(
+        rgba(255, 255, 255, 0.15),
+        rgba(255, 192, 203, 0.25)
+      ),
+      url("./images/lofi_theme.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+
+    color: var(--ink);
+
+    --panel: #2c274e;
+    --ink: #e8eaff;
+    --muted: #9aa0ff;
+
+    --accent: #00e5ff;     /* electric cyan */
+    --accent-2: #ff2dac;   /* neon magenta */
+    --btnText: #0b0d10;
+  }
+
+  /* 5) Ocean / Teal — cool aquas & blues */
+  &.theme-5 {
+    background:
+      linear-gradient(
+        rgba(255, 255, 255, 0.15),
+        rgba(255, 192, 203, 0.25)
+      ),
+      url("./images/ocean_theme.gif");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+
+    color: var(--ink);
+
+    .card {
+      background: color-mix(in srgb, var(--panel) 90%, #00c3b6a0);
+      border: 1px solid color-mix(in srgb, var(--accent) 25%, #00c3b6a0);
+    }
+
+    .input {
+      border-color: rgba(182, 244, 255, 0.6);
+      background: rgba(255, 255, 255, 0.85);
+      color: #0b0d10;
+      &:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(105, 243, 255, 0.25);
+      }
+    }
+
+    --panel: #1f8780a0;
+    --ink: #e6fbff;
+    --muted: #a6c7cf;
+
+    --accent: #00c3b6a0;     /* aqua */
+    --accent-2: #1992d4;   /* blue */
+    --btnText: #08292a;
+  }
+
+  /* 6) Sunset / Desert — orange, coral, dusk purple */
+  &.theme-6 {
+    --bg-top: #1c0f1a;
+    --bg-bottom: #110b1f;
+    --bg-glow-1: rgba(255, 153, 0, 0.24);   /* orange */
+    --bg-glow-2: rgba(255, 64, 64, 0.16);   /* coral */
+
+    --panel: #1e1420;
+    --ink: #fff3e8;
+    --muted: #f1c9a8;
+
+    --accent: #ff8a00;     /* sunset orange */
+    --accent-2: #ff4d4d;   /* coral red */
+    --btnText: #2b1200;
+  }
+
+
+  /* Header */
+  .header {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    .tag {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .status {
+      display: flex;
+      gap: 8px;
+      .chip {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  /* Status Message */
+  .message {
+    margin: 0;
+    padding: 10px 12px;
+    border-left: 3px solid var(--accent);
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+    color: var(--ink);
+  }
+
+  /* Layout */
+  .layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 16px;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 18px;              /* a bit extra to prevent edge touching */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    display: grid;
+    gap: 16px;                  /* spacing between cards */
+    background-clip: padding-box;
+  }
+
+  /* Cards */
+  .card {
+    border-radius: 12px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07); /* crisp inner edge */
+    overflow: hidden;            /* stop any child bleed over rounded corners */
+    background-clip: padding-box;
+  }
+
+  .label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  /* Base inputs & buttons (global) */
+  .input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;                 /* round on all sides by default */
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--ink);
+    outline: none;
+    transition: 160ms;
+    &:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(120,178,60,0.25);
+    }
+  }
+
+  .btn {
+    box-sizing: border-box;
+    appearance: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.06));
+    color: var(--ink);
+    border-radius: 10px;                 /* ✅ header buttons now round on the left too */
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: 160ms;
+    &:hover { transform: translateY(-1px); }
+    &:active { transform: translateY(0); }
+  }
+
+  .btn.primary {
+    border-color: transparent;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent) 90%, white),
+      var(--accent)
+    );
+    color: var(--btnText, #0e130d);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--accent) 30%, black);
+  }
+
+  .muted { color: var(--muted); }
+
+  /* ------- Compound control ONLY inside the Add-a-task row ------- */
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: stretch;
+    gap: 0;                                 /* no visible gap */
+  }
+
+  /* Scope the “joined” edges ONLY here */
+  .row .input {
+    border-right: none;                      /* join with button */
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    height: 44px;
+  }
+
+  .row .btn {
+    border-left: none;                       /* join with input */
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    height: 44px;
+  }
+
+  /* ------- Search card input remains fully rounded & spaced ------- */
+  /* Nothing extra needed — the global .input rules above keep it rounded
+     and the .card padding ensures it never touches the right edge. */
+
+  /* List */
+  .list {
+    list-style: none;
+    margin: 8px 0 16px;
+    padding: 0;
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+    .text { overflow-wrap: anywhere; }
+
+    &.done .text {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+
+    .icon.trash {
+      background: transparent;
+      border: none;
+      font-size: 1.05rem;
+      opacity: 0.85;
+      cursor: pointer;
+      &:hover { opacity: 1; }
+    }
+  }
+
+  /* Custom checkbox */
+  .check {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .box {
+      width: 18px; height: 18px;
+      border-radius: 6px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.06);
+      transition: 160ms;
+      display: grid; place-items: center;
+    }
+  }
+  .item input:checked + .box {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: 0 0 0 3px rgba(120,178,60,0.25);
+  }
+
+  /* Achievements */
+  .achievements {
+    list-style: none;
+    padding: 0; margin: 0;
+    display: grid;
+    gap: 8px;
+
+    .badge {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .badge.success { border-color: rgba(120,178,60,0.35); }
+    .badge.failure { border-color: rgba(255,107,107,0.35); }
+
+    .time {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+  }
 }
