@@ -10,12 +10,45 @@ import { FunctionComponent } from "react";
  * and remove the InputProps interface
  */
 
-interface InputProps {}
+interface InputProps {
+  query: string;
+  region: string;
+  onQueryChange: (value: string) => void;
+  onRegionChange: (value: string) => void;
+}
 
-const Input: FunctionComponent<InputProps> = (props) => {
+const Input: FunctionComponent<InputProps> = ({
+  query,
+  region,
+  onQueryChange,
+  onRegionChange,
+}) => {
   return (
-    <div>#Input goes here#</div>
+    <div className="search-controls">
+      <input
+        type="text"
+        placeholder="Search by university name..."
+        value={query}
+        onChange={(e) => onQueryChange(e.target.value)}
+      />
+
+      <select
+        value={region}
+        onChange={(e) => onRegionChange(e.target.value)}
+      >
+        <option value="All">All Regions</option>
+        <option value="Capital Region">Capital Region</option>
+        <option value="Central Denmark">Central Denmark</option>
+        <option value="Southern Denmark">Southern Denmark</option>
+        <option value="Zealand">Zealand</option>
+        <option value="North Denmark">North Denmark</option>
+      </select>
+    </div>
   );
 };
 
 export default Input;
+
+
+
+
