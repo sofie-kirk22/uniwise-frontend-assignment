@@ -23,7 +23,7 @@
   transition: color .2s ease, background-color .2s ease, border-color .2s ease;
 
   /* Themes override variables on the same element */
-  /* 1) Corporate — blues/greys, crisp + professional */
+  /* 1) Corporate */
   &.theme-1 {
     --bg-top: #0b121a;
     --bg-bottom: #0e141b;
@@ -34,22 +34,20 @@
     --ink: #e8eef6;
     --muted: #9fb0c4;
 
-    --accent: #2f7de1;     /* primary blue */
-    --accent-2: #1f5fb1;   /* darker blue */
+    --accent: #2f7de1;     
+    --accent-2: #1f5fb1;   
     --btnText: #ffffff;
   }
 
-  /* 2) Barbie — vibrant pinks, playful */
-  /* === Barbie Theme (with background image) === */
+  /* 2) Barbie Theme */
   &.theme-2 {
-    /* Core color palette */
-    --panel: rgba(255, 240, 245, 0.88); /* light blush overlay */
+    --panel: rgba(255, 240, 245, 0.88); 
     --ink: #4a0d2c;
     --muted: #a0467f;
-    --accent: #ff4fb3;
-    --accent-2: #ff86d7;
+    --accent: #fd77c3;
+    --accent-2: #f951c1;
+    --btnText: #2b1200;
 
-    /* Background with the Barbie texture */
     background:
       linear-gradient(
         rgba(255, 255, 255, 0.15),
@@ -63,80 +61,42 @@
 
     color: var(--ink);
 
-    /* Panels */
-    .panel {
-      background: var(--panel);
-      border: 2px solid color-mix(in srgb, var(--accent) 40%, white);
-      box-shadow: 0 6px 20px rgba(255, 79, 179, 0.25);
-    }
-
-    /* Cards */
-    .card {
-      background: color-mix(in srgb, var(--panel) 90%, white);
-      border: 1px solid color-mix(in srgb, var(--accent) 25%, white);
-    }
-
-    /* Buttons */
-    .btn {
-      border-radius: 12px;
-      border: 1px solid color-mix(in srgb, var(--accent) 25%, white);
-      color: var(--ink);
-    }
-    .btn.primary {
-      background: linear-gradient(180deg, var(--accent-2), var(--accent));
-      border: none;
-      color: white;
-      box-shadow: 0 8px 20px rgba(255, 79, 179, 0.35);
-      &:hover {
-        transform: translateY(-1px);
-      }
-    }
-
-    /* Inputs */
-    .input {
-      border-color: rgba(255, 182, 193, 0.6);
-      background: rgba(255, 255, 255, 0.85);
-      color: var(--ink);
-      &:focus {
-        border-color: var(--accent);
-        box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.25);
-      }
-    }
-
-    /* Checkboxes */
-    .check .box {
-      border-radius: 8px;
-      border-color: rgba(255, 105, 180, 0.4);
-      background: rgba(255, 255, 255, 0.7);
-    }
-    .item input:checked + .box {
-      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+    .check .box{
       border-color: var(--accent);
     }
 
-    /* Headers */
-    .brand h1 {
-      color: var(--accent);
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      font-size: 1.8rem;
-      text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5);
+    .input {
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.85);
+      color: #100b0e;
+      &:focus {
+        border-color: #c300b3a0;
+        box-shadow: 0 0 0 3px rgba(255, 105, 230, 0.25);
+      }
     }
 
-    .message {
-      background: rgba(255, 255, 255, 0.75);
-      color: var(--ink);
-      border-left: 3px solid var(--accent);
-      border-radius: 10px;
+    .row .btn {
+      border-left: none; /* keeps the joined edge clean */
+      background: linear-gradient(180deg, #ff86d7, #ff4fb3);
+      border: 1px solid var(--accent);
+      color: var(--ink);                
+      box-shadow: 0 8px 18px rgba(255, 79, 179, 0.35);
+    }
+    .row .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(255, 79, 179, 0.45);
+    }
+    .row .btn:active {
+      transform: translateY(0);
     }
 
-    .status .chip {
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid color-mix(in srgb, var(--accent) 40%, white);
-      color: var(--ink);
+    .card {
+      background: color-mix(in srgb, var(--panel) 90%, #c30075a0);
+      border: 1px solid color-mix(in srgb, var(--accent) 25%, #f162c1a0);
     }
   }
 
-  /* 3) Metal / Rock — charcoal + blood red */
+  /* 3) Metal / Rock */
   &.theme-3 {
     background:
       linear-gradient(
@@ -155,8 +115,8 @@
     --ink: #ececee;
     --muted: #9a9a9c;
 
-    --accent: #750e1c;     /* crimson */
-    --accent-2: #611616;   /* deep maroon */
+    --accent: #750e1c;     
+    --accent-2: #611616;   
     --btnText: #ffffff;
   }
 
@@ -179,12 +139,12 @@
     --ink: #e8eaff;
     --muted: #9aa0ff;
 
-    --accent: #00e5ff;     /* electric cyan */
-    --accent-2: #ff2dac;   /* neon magenta */
+    --accent: #00e5ff;    
+    --accent-2: #ff2dac;   
     --btnText: #0b0d10;
   }
 
-  /* 5) Ocean / Teal — cool aquas & blues */
+  /* 5) Ocean / Teal */
   &.theme-5 {
     background:
       linear-gradient(
@@ -218,24 +178,24 @@
     --ink: #e6fbff;
     --muted: #a6c7cf;
 
-    --accent: #00c3b6a0;     /* aqua */
-    --accent-2: #1992d4;   /* blue */
+    --accent: #00c3b6a0;     
+    --accent-2: #1992d4;   
     --btnText: #08292a;
   }
 
-  /* 6) Sunset / Desert — orange, coral, dusk purple */
+  /* 6) Sunset / Desert */
   &.theme-6 {
     --bg-top: #1c0f1a;
     --bg-bottom: #110b1f;
-    --bg-glow-1: rgba(255, 153, 0, 0.24);   /* orange */
-    --bg-glow-2: rgba(255, 64, 64, 0.16);   /* coral */
+    --bg-glow-1: rgba(255, 153, 0, 0.24);   
+    --bg-glow-2: rgba(255, 64, 64, 0.16);   
 
     --panel: #1e1420;
     --ink: #fff3e8;
     --muted: #f1c9a8;
 
-    --accent: #ff8a00;     /* sunset orange */
-    --accent-2: #ff4d4d;   /* coral red */
+    --accent: #ff8a00;     
+    --accent-2: #ff4d4d;   
     --btnText: #2b1200;
   }
 
@@ -303,10 +263,10 @@
     background: var(--panel);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
-    padding: 18px;              /* a bit extra to prevent edge touching */
+    padding: 18px;              
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     display: grid;
-    gap: 16px;                  /* spacing between cards */
+    gap: 16px;                  
     background-clip: padding-box;
   }
 
@@ -315,8 +275,8 @@
     border-radius: 12px;
     padding: 14px;
     background: rgba(255, 255, 255, 0.03);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07); /* crisp inner edge */
-    overflow: hidden;            /* stop any child bleed over rounded corners */
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07); 
+    overflow: hidden;           
     background-clip: padding-box;
   }
 
@@ -326,12 +286,11 @@
     margin-bottom: 8px;
   }
 
-  /* Base inputs & buttons (global) */
   .input {
     box-sizing: border-box;
     width: 100%;
     padding: 10px 12px;
-    border-radius: 10px;                 /* round on all sides by default */
+    border-radius: 10px;                 
     border: 1px solid rgba(255, 255, 255, 0.12);
     background: rgba(255, 255, 255, 0.06);
     color: var(--ink);
@@ -349,7 +308,7 @@
     border: 1px solid rgba(255, 255, 255, 0.15);
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.06));
     color: var(--ink);
-    border-radius: 10px;                 /* ✅ header buttons now round on the left too */
+    border-radius: 10px;          
     padding: 10px 14px;
     cursor: pointer;
     transition: 160ms;
@@ -370,32 +329,62 @@
 
   .muted { color: var(--muted); }
 
+  /* ---------------- Sound Toggle ---------------- */
+  .sound-toggle {
+    appearance: none;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: var(--ink);
+    transition: transform 0.15s ease, color 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 6px;
+    border-radius: 8px;
+
+    &:hover {
+      transform: scale(1.15);
+      color: var(--accent);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &.off {
+      color: var(--muted);
+      filter: brightness(0.8);
+    }
+  }
+
+
   /* ------- Compound control ONLY inside the Add-a-task row ------- */
   .row {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: stretch;
-    gap: 0;                                 /* no visible gap */
+    gap: 0;                                 
   }
 
-  /* Scope the “joined” edges ONLY here */
   .row .input {
-    border-right: none;                      /* join with button */
+    border-right: none;                      
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     height: 44px;
   }
 
   .row .btn {
-    border-left: none;                       /* join with input */
+    border-left: none;                      
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     height: 44px;
   }
 
   /* ------- Search card input remains fully rounded & spaced ------- */
-  /* Nothing extra needed — the global .input rules above keep it rounded
-     and the .card padding ensures it never touches the right edge. */
 
   /* List */
   .list {

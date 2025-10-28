@@ -1,43 +1,48 @@
-import { FunctionComponent, useMemo, useRef, useState } from "react";
+import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 import "./index.scss";
 
 import { Achievement, ThemeId, Todo } from "./types";
 import { rollDice, uid } from "./utils";
 
+// Components
 import AddTodo from "./components/AddTodo";
 import SearchBox from "./components/SearchBox";
 import Achievements from "./components/Achievements";
 import TodoList from "./components/TodoList";
 
-// 🎵 Local audio imports
+// SVG icons
+import { Volume2, VolumeX } from "lucide-react";
+
+// Audio imports
 import barbieSong from "./audio/barbiegirl.mp3";
 import metalSong from "./audio/metal_theme.mp3";
 import lofiSong from "./audio/lofi_theme.mp3";
-import oceanSong from "./audio/ocean_theme.mp3"; // 🌊 Add this file
+import oceanSong from "./audio/ocean_theme.mp3";
 
 const Index: FunctionComponent = () => {
-  // Theme dice (aesthetic)
+  // Theme dice 
   const [theme, setTheme] = useState<ThemeId>(rollDice());
 
   // Todos/Search
   const [todos, setTodos] = useState<Todo[]>([]);
   const [query, setQuery] = useState("");
 
-  // Game state
+  // Target dice
   const [rollId, setRollId] = useState(0);
   const [target, setTarget] = useState<number | null>(null);
   const [secondRoll, setSecondRoll] = useState<number | null>(null);
   const [message, setMessage] = useState<string>("Roll to set today’s target!");
   const [achievements, setAchievements] = useState<Achievement[]>([]);
 
-  // Sound Refs
+  // Sound
   const [soundOn, setSoundOn] = useState(true);
+  const userInteractedRef = useRef(false); 
   const barbieAudioRef = useRef<HTMLAudioElement | null>(null);
   const metalAudioRef = useRef<HTMLAudioElement | null>(null);
   const lofiAudioRef = useRef<HTMLAudioElement | null>(null);
-  const oceanAudioRef = useRef<HTMLAudioElement | null>(null); // 🌊
+  const oceanAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Filtered Todos
+  // Derived lists
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();
     return q ? todos.filter((t) => t.text.toLowerCase().includes(q)) : todos;
@@ -94,33 +99,67 @@ const Index: FunctionComponent = () => {
   };
 
   const playBarbie = async () => {
-    if (!soundOn) return;
+    if (!soundOn || !userInteractedRef.current) return;
     stopAllAudio();
     try {
       await ensureBarbie().play();
     } catch {}
   };
   const playMetal = async () => {
-    if (!soundOn) return;
+    if (!soundOn || !userInteractedRef.current) return;
     stopAllAudio();
     try {
       await ensureMetal().play();
     } catch {}
   };
   const playLofi = async () => {
-    if (!soundOn) return;
+    if (!soundOn || !userInteractedRef.current) return;
     stopAllAudio();
     try {
       await ensureLofi().play();
     } catch {}
   };
   const playOcean = async () => {
-    if (!soundOn) return;
+    if (!soundOn || !userInteractedRef.current) return;
     stopAllAudio();
     try {
       await ensureOcean().play();
     } catch {}
   };
+
+  const playForTheme = () => {
+    if (!soundOn || !userInteractedRef.current) return;
+    if (theme === 2) playBarbie();
+    else if (theme === 3) playMetal();
+    else if (theme === 4) playLofi();
+    else if (theme === 5) playOcean();
+    else stopAllAudio();
+  };
+
+  /* -------------------- ONCE: CAPTURE FIRST USER GESTURE -------------------- */
+  useEffect(() => {
+    const onFirstGesture = () => {
+      userInteractedRef.current = true;
+      playForTheme(); // try to start if initial theme has audio
+      window.removeEventListener("pointerdown", onFirstGesture);
+      window.removeEventListener("keydown", onFirstGesture);
+    };
+    window.addEventListener("pointerdown", onFirstGesture, { once: true });
+    window.addEventListener("keydown", onFirstGesture, { once: true });
+    return () => {
+      window.removeEventListener("pointerdown", onFirstGesture);
+      window.removeEventListener("keydown", onFirstGesture);
+    };
+  }, []);
+
+  /* -------------------- REACT TO THEME / SOUND CHANGES -------------------- */
+  useEffect(() => {
+    if (!soundOn) {
+      stopAllAudio();
+      return;
+    }
+    playForTheme();
+  }, [theme, soundOn]);
 
   /* -------------------- ACHIEVEMENTS -------------------- */
   const pushAchievement = (
@@ -146,6 +185,7 @@ const Index: FunctionComponent = () => {
     const total = nextTodos.length;
     const totalDone = nextTodos.filter((t) => t.done).length;
 
+    // critical failure roll
     if (nextSecondRoll === 1) {
       if (totalDone === 1 && !hasAchForRoll("not_your_day", rId)) {
         pushAchievement({
@@ -162,11 +202,8 @@ const Index: FunctionComponent = () => {
       }
     }
 
-    if (
-      nextTarget != null &&
-      totalDone >= nextTarget &&
-      !hasAchForRoll("hit_target", rId)
-    ) {
+    // reach at least the target
+    if (nextTarget != null && totalDone >= nextTarget && !hasAchForRoll("hit_target", rId)) {
       pushAchievement({
         label: `Hit Your Roll: Completed ${nextTarget} task${nextTarget === 1 ? "" : "s"}`,
         kind: "success",
@@ -176,6 +213,7 @@ const Index: FunctionComponent = () => {
       setMessage(`Target: ${nextTarget}. Completed: ${totalDone}. Great job!`);
     }
 
+    // complete all tasks
     if (total > 0 && totalDone === total && !hasAchForRoll("all_done", rId)) {
       pushAchievement({
         label: `All Done: Cleared all ${total} task${total === 1 ? "" : "s"}`,
@@ -214,17 +252,6 @@ const Index: FunctionComponent = () => {
   const rollTheme = () => {
     const d = rollDice();
     setTheme(d);
-
-    // 🎵 Switch soundtrack by theme
-    if (!soundOn) {
-      stopAllAudio();
-      return;
-    }
-    if (d === 2) playBarbie();
-    else if (d === 3) playMetal();
-    else if (d === 4) playLofi();
-    else if (d === 5) playOcean(); // 🌊 Ocean theme
-    else stopAllAudio();
   };
 
   const rollTarget = () => {
@@ -248,7 +275,7 @@ const Index: FunctionComponent = () => {
     <div id="task-3" className={`theme-${theme}`}>
       <header className="header">
         <div className="brand">
-          <h1 style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', fontWeight: 700 }}>
+          <h1>
             Dice Todo
           </h1>
           <p className="tag">Gamified goals with a roll of the dice</p>
@@ -262,32 +289,28 @@ const Index: FunctionComponent = () => {
             🎯 Roll Target
           </button>
 
-          {/* Sound toggle */}
-          <label className="chip" style={{ cursor: "pointer" }}>
-            <input
-              type="checkbox"
-              checked={soundOn}
-              onChange={(e) => {
-                const on = e.target.checked;
-                setSoundOn(on);
-                if (!on) {
-                  stopAllAudio();
-                } else {
-                  if (theme === 2) playBarbie();
-                  else if (theme === 3) playMetal();
-                  else if (theme === 4) playLofi();
-                  else if (theme === 5) playOcean();
-                }
-              }}
-              style={{ marginRight: 6 }}
-            />
-            Sound {soundOn ? "On" : "Off"}
-          </label>
-
           <div className="status">
             <span className="chip">Theme: {theme}</span>
             <span className="chip">Target: {secondRoll == null ? "—" : secondRoll}</span>
           </div>
+
+          {/* Sound toggle (Lucide icons) */}
+          <button
+            className={`sound-toggle ${soundOn ? "on" : "off"}`}
+            onClick={() => {
+              const newState = !soundOn;
+              setSoundOn(newState);
+              if (!newState) {
+                stopAllAudio();
+              } else {
+                if (userInteractedRef.current) playForTheme();
+              }
+            }}
+            title={soundOn ? "Sound On" : "Sound Off"}
+            aria-label={soundOn ? "Sound On" : "Sound Off"}
+          >
+            {soundOn ? <Volume2 size={22} /> : <VolumeX size={22} />}
+          </button>
         </div>
       </header>
 
