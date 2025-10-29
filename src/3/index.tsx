@@ -52,45 +52,15 @@ const Index: FunctionComponent = () => {
   const done = filtered.filter((t) => t.done);
 
   /* -------------------- AUDIO HELPERS -------------------- */
-  const ensureBarbie = () => {
-    if (!barbieAudioRef.current) {
-      const el = new Audio(barbieSong);
-      el.volume = 0.55;
-      el.loop = true;
-      barbieAudioRef.current = el;
-    }
-    return barbieAudioRef.current!;
-  };
-  const ensureMetal = () => {
-    if (!metalAudioRef.current) {
-      const el = new Audio(metalSong);
-      el.volume = 0.6;
-      el.loop = true;
-      metalAudioRef.current = el;
-    }
-    return metalAudioRef.current!;
-  };
-  const ensureLofi = () => {
-    if (!lofiAudioRef.current) {
-      const el = new Audio(lofiSong);
-      el.volume = 0.6;
-      el.loop = true;
-      lofiAudioRef.current = el;
-    }
-    return lofiAudioRef.current!;
-  };
-  const ensureOcean = () => {
-    if (!oceanAudioRef.current) {
-      const el = new Audio(oceanSong);
-      el.volume = 0.7;
-      el.loop = true;
-      oceanAudioRef.current = el;
-    }
-    return oceanAudioRef.current!;
+  const audioMap: Record<number, { src: string; ref: React.MutableRefObject<HTMLAudioElement | null>; volume: number }> = {
+    2: { src: barbieSong, ref: useRef<HTMLAudioElement | null>(null), volume: 0.55 },
+    3: { src: metalSong, ref: useRef<HTMLAudioElement | null>(null), volume: 0.6 },
+    4: { src: lofiSong, ref: useRef<HTMLAudioElement | null>(null), volume: 0.6 },
+    5: { src: oceanSong, ref: useRef<HTMLAudioElement | null>(null), volume: 0.7 },
   };
 
   const stopAllAudio = () => {
-    [barbieAudioRef, metalAudioRef, lofiAudioRef, oceanAudioRef].forEach((ref) => {
+    Object.values(audioMap).forEach(({ ref }) => {
       if (ref.current) {
         ref.current.pause();
         ref.current.currentTime = 0;
@@ -98,41 +68,36 @@ const Index: FunctionComponent = () => {
     });
   };
 
-  const playBarbie = async () => {
-    if (!soundOn || !userInteractedRef.current) return;
-    stopAllAudio();
-    try {
-      await ensureBarbie().play();
-    } catch {}
+  const ensureAudio = (themeId: number): HTMLAudioElement | null => {
+    const cfg = audioMap[themeId];
+    if (!cfg) return null;
+
+    if (!cfg.ref.current) {
+      const el = new Audio(cfg.src);
+      el.volume = cfg.volume;
+      el.loop = true;
+      cfg.ref.current = el;
+    }
+    return cfg.ref.current;
   };
-  const playMetal = async () => {
+
+  const playAudio = async (themeId: number) => {
     if (!soundOn || !userInteractedRef.current) return;
     stopAllAudio();
+
+    const audio = ensureAudio(themeId);
+    if (!audio) return;
+
     try {
-      await ensureMetal().play();
-    } catch {}
-  };
-  const playLofi = async () => {
-    if (!soundOn || !userInteractedRef.current) return;
-    stopAllAudio();
-    try {
-      await ensureLofi().play();
-    } catch {}
-  };
-  const playOcean = async () => {
-    if (!soundOn || !userInteractedRef.current) return;
-    stopAllAudio();
-    try {
-      await ensureOcean().play();
-    } catch {}
+      await audio.play();
+    } catch (err) {
+      console.warn("Audio playback failed:", err);
+    }
   };
 
   const playForTheme = () => {
     if (!soundOn || !userInteractedRef.current) return;
-    if (theme === 2) playBarbie();
-    else if (theme === 3) playMetal();
-    else if (theme === 4) playLofi();
-    else if (theme === 5) playOcean();
+    if ([2, 3, 4, 5].includes(theme)) playAudio(theme);
     else stopAllAudio();
   };
 
