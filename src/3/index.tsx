@@ -38,7 +38,7 @@ const Index: FunctionComponent = () => {
   // Achievements hook
   const { achievements, evaluateAchievements } = useAchievements();
 
-  // Memoize audio config so useAudio doesn't see a new object every render
+  // Memoize audio config 
   const audioDefs = useMemo(
     () => ({
       2: { src: barbieSong, volume: 0.55 },

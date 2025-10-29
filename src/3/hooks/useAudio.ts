@@ -24,34 +24,43 @@ export function useAudio(audioDefs: Record<number, { src: string; volume: number
     return refs.current[k];
   };
 
-  const stopAll = useCallback(() => {
+  const stopAll = () => {
     Object.values(refs.current).forEach(a => {
-        if (a) {
-        a.pause();
-        a.currentTime = 0;
-        }
+      if (a) {
+        a.pause(); 
+      }
     });
-    currentThemeRef.current = null;
-    }, []);
+  };
 
-    const playForTheme = useCallback(async (theme: number) => {
+  const playForTheme = async (theme: number) => {
     if (!soundOn || !interactedRef.current) return;
 
     const current = currentThemeRef.current;
     const audio = ensure(theme);
+    if (!audio) return;
 
-    if (current === theme && audio && !audio.paused) return;
+    if (current === theme && audio.paused) {
+      try {
+        await audio.play();
+        return;
+      } catch (err) {
+        console.warn("Audio resume failed:", err);
+      }
+    }
 
-    stopAll();
-    if (audio) {
-        try {
+    if (current !== theme) {
+      Object.values(refs.current).forEach(a => a?.pause());
+      audio.currentTime = 0;
+      try {
         await audio.play();
         currentThemeRef.current = theme;
-        } catch (err) {
+      } catch (err) {
         console.warn("Audio playback failed:", err);
-        }
+      }
     }
-    }, [soundOn, stopAll]);
+  };
+
+
   // first user gesture unlock (only once)
   useEffect(() => {
     const on = () => {
