@@ -1,7 +1,7 @@
 // Style
 import { FunctionComponent, useMemo, useState } from "react";
 import "./index.scss";
-import uniwiseBrand from "./images/uniwise_logo.png"; // your combined logo+text image
+import uniwiseBrand from "./images/uniwise_logo.png";
 
 const Task1: FunctionComponent = () => {
   const [email, setEmail] = useState("");
