@@ -37,10 +37,6 @@ const Index: FunctionComponent = () => {
   // Sound
   const [soundOn, setSoundOn] = useState(true);
   const userInteractedRef = useRef(false); 
-  const barbieAudioRef = useRef<HTMLAudioElement | null>(null);
-  const metalAudioRef = useRef<HTMLAudioElement | null>(null);
-  const lofiAudioRef = useRef<HTMLAudioElement | null>(null);
-  const oceanAudioRef = useRef<HTMLAudioElement | null>(null);
 
   // Derived lists
   const filtered = useMemo(() => {
